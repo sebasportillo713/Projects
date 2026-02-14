@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", serif;
+    background-color: #0b1522;
+}
+
+.heart {
+    height: 200px;
+    width: 200px;
+    background-color: #f20044;
+    position: relative;
+    transform: rotate(-45deg);
+    box-shadow: -10px 10px 90px #f20044;
+    animation: heart 0.6s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;  
+    font-size: 12px; 
+    text-align: center;
+    padding: 10px;
+}
+
+h1 {
+    text-align: top;
+    font-family: 'Dancing Script', cursive;
+    margin-top: 280px; 
+    color: #ff4d6d;
+    display: block;
+    background: linear-gradient(45deg, #ff4d6d, #ff758f, #c9184a, #ff4d6d);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: colorFlow 5s ease infinite, floating 3s ease-in-out infinite;
+    background-clip: text;
+    color: transparent;
+}
+h2 {text-align: top;
+    font-family: 'Dancing Script', cursive;
+    margin-top: 280px; 
+    color: #ff4d6d;
+    display: block;}
+
+.heart p {
+    position: absolute;
+    z-index: 9999;
+    width: 100%;
+    transform: rotate(45deg) translate(0,-50px);
+}
+
+
+
+@keyframes  heart {
+    0% {
+        transform: rotate(-45deg) scale(1.07);
+    }
+    80% {
+        transform: rotate(-45deg) scale(1.0);
+    }
+    100% {
+        transform: rotate(-45deg) scale(0.8);
+    }
+}
+@keyframes colorFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.heart::before {
+    content: "";
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    background-color: #f20044;
+    top: -50%;
+    border-radius: 100px;
+    box-shadow: -10px -10px 90px #f20044;
+}
+
+.heart::after {
+    content: "";
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    background-color: #f20044;
+    right: -50%;
+    border-radius: 100px;
+    box-shadow: 10px 10px 90px #f20044;
+}
