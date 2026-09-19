@@ -1,33 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="parati.css">
-    <title>Feliz San Valentin Vicky</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Juguemos un jueguito...</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Feliz San Valentin </h1>
-    <h2>🍄</h2>
-    <div class="heart">
-        
-        <p> Hola Vicky
-            Quizas no te pueda ver hoy pero quiero que sepas que te quiero Mucho. Feliz San Valentin, ojalá nos podamos ver Pronto ❤️✨</p>
+<div id="stage">
+  <header>
+    <h1>Mira las figuras que salen del jardín</h1>
+    <p class="sub">Toca la tierra y mira que va brotando 🌱</p>
+  </header>
+
+  <div id="tray"></div>
+  <div id="count-label">0 / 10 brotaron</div>
+
+  <div id="garden"></div>
+  <div id="hint">Toca cada montoncito de tierra</div>
+
+  <div id="honguito-wrap">
+    <div id="honguito">
+      <div class="cap"><span></span><span></span><span></span><span></span></div>
+      <div class="stem"></div>
+      <div class="face">
+        <div class="eye l"></div>
+        <div class="eye r"></div>
+        <div class="cheek l"></div>
+        <div class="cheek r"></div>
+      </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.1/dist/confetti.browser.min.js"></script>
+    <div id="bubble">
+      <h2>Feliz Día del Amor y la Amistad</h2>
+      <p>Que la pases súper, Vicky.</p>
+      <p>Te quiero mucho señorita bióloga 🫶</p>
+      <div class="leaf-heart"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-    setInterval(() => {
-        confetti({
-            particleCount: 100,
-            spread: 60,
-            origin: { x: 0.5, y: 0.5 }
-        });
-    }, 2000); 
+(function(){
+  var garden = document.getElementById('garden');
+  var tray = document.getElementById('tray');
+  var countLabel = document.getElementById('count-label');
+  var hint = document.getElementById('hint');
+  var honguitoWrap = document.getElementById('honguito-wrap');
+
+  var total = 10;
+  var grown = 0;
+
+  // Iconos
+  var icons = [
+    // ADN
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#d9a441" stroke-width="2" stroke-linecap="round"><path d="M6 2c0 6 12 6 12 12s-12 6-12 12"/><path d="M18 2c0 6-12 6-12 12s12 6 12 12"/><path d="M7 6h10M6 12h12M7 18h10"/></svg>',
+    // Pata
+    '<svg viewBox="0 0 24 24" fill="#c1432a"><ellipse cx="12" cy="16" rx="6" ry="5"/><circle cx="5" cy="9" r="2.4"/><circle cx="10" cy="5.5" r="2.4"/><circle cx="15" cy="5.5" r="2.4"/><circle cx="19" cy="9" r="2.4"/></svg>',
+    // Hoja
+    '<svg viewBox="0 0 24 24" fill="#7fa368"><path d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16z"/><path d="M20 4L6 18" stroke="#4c6b3f" stroke-width="1.4" fill="none"/></svg>',
+    // Flor
+    '<svg viewBox="0 0 24 24" fill="#b98fd6"><circle cx="12" cy="6" r="3.4"/><circle cx="12" cy="18" r="3.4"/><circle cx="6" cy="12" r="3.4"/><circle cx="18" cy="12" r="3.4"/><circle cx="12" cy="12" r="3" fill="#d9a441"/></svg>',
+    // pluma
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#f1e4c9" stroke-width="1.6"><path d="M19 3C10 5 5 12 5 21" stroke-linecap="round"/><path d="M17 5l-3 3M15 8l-3 3M13 11l-3 3M11 14l-3 3" /></svg>',
+    // brote=
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#7fa368" stroke-width="2" stroke-linecap="round"><path d="M12 21V11"/><path d="M12 11c0-4 -4-5-8-4 1 4 4 6 8 4z"/><path d="M12 11c0-5 4-6 8-5 -1 5-4 7-8 5z"/></svg>',
+    // mariposa
+    '<svg viewBox="0 0 24 24" fill="#9a6fc9"><path d="M12 4c-1 3-5 3-6 0-2 3 0 8 6 8z"/><path d="M12 4c1 3 5 3 6 0 2 3 0 8-6 8z"/><rect x="11.2" y="3" width="1.6" height="14" rx="0.8" fill="#3b2a1c"/></svg>',
+    // huevo
+    '<svg viewBox="0 0 24 24" fill="#f1e4c9"><ellipse cx="12" cy="13" rx="7" ry="9"/></svg>',
+    // Gota de agua
+    '<svg viewBox="0 0 24 24" fill="#8fb3d9"><path d="M12 2c4 6 7 10 7 14a7 7 0 0 1-14 0c0-4 3-8 7-14z"/></svg>',
+    // honguito
+    '<svg viewBox="0 0 24 24" fill="none"><path d="M4 11c0-5 4-8 8-8s8 3 8 8H4z" fill="#c1432a"/><rect x="9" y="11" width="6" height="8" rx="2" fill="#f1e4c9"/><circle cx="8" cy="7" r="1.2" fill="#f1e4c9"/><circle cx="15" cy="6" r="1.2" fill="#f1e4c9"/></svg>'
+  ];
+
+  //Iconos funcion
+  icons.sort(function(){ return Math.random() - 0.5; });
+
+  var traySlots = [];
+  for(var t=0;t<total;t++){
+    var slot = document.createElement('div');
+    slot.className = 'tray-slot';
+    tray.appendChild(slot);
+    traySlots.push(slot);
+  }
+
+  for(var i=0;i<total;i++){
+    (function(index){
+      var mound = document.createElement('div');
+      mound.className = 'mound';
+      var sprout = document.createElement('div');
+      sprout.className = 'sprout';
+      sprout.innerHTML = icons[index];
+      mound.appendChild(sprout);
+
+      mound.addEventListener('click', function(){
+        if(mound.classList.contains('grown')) return;
+        mound.classList.add('grown');
+        grown++;
+        traySlots[grown-1].classList.add('filled');
+        traySlots[grown-1].innerHTML = icons[index];
+        countLabel.textContent = grown + ' / ' + total + ' brotaron';
+        if(grown === 1){ hint.style.opacity = '0'; }
+        if(grown >= total){
+          setTimeout(function(){
+            honguitoWrap.classList.add('show');
+            honguitoWrap.scrollIntoView({behavior:'smooth', block:'center'});
+          }, 500);
+        }
+      });
+
+      garden.appendChild(mound);
+    })(i);
+  }
+})();
 </script>
 </body>
 </html>
